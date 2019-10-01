@@ -1,5 +1,6 @@
 {
-    "name": "GIT_USER_ID/GIT_REPO_ID",
+    "name": "smart-gamma/dpae-api-sdk",
+    "version": "1.0.0",
     "description": "",
     "keywords": [
         "swagger",
@@ -28,9 +29,9 @@
         "friendsofphp/php-cs-fixer": "~1.12"
     },
     "autoload": {
-        "psr-4": { "Swagger\\Client\\" : "lib/" }
+        "psr-4": { "DPAE\\" : "dpae-api-sdk/" }
     },
     "autoload-dev": {
-        "psr-4": { "Swagger\\Client\\" : "test/" }
+        "psr-4": { "DPAE\\" : "test/" }
     }
 }

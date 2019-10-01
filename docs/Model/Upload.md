@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **xmlnsrxphadr** | **string** |  | [optional] 
 **xmlnsxsi** | **string** |  | [optional] 
 **indicator** | **int** |  | [optional] 
-**dues_group** | [**\Swagger\Client\Model\DuesGroup**](DuesGroup.md) |  | [optional] 
+**duesGroup** | [**\DPAE\Model\DuesGroup**](DuesGroup.md) |  | [optional] 
 
 [[Back to Model list]](../../README.md#documentation-for-models) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to README]](../../README.md)
 

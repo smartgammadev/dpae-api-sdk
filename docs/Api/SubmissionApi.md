@@ -1,4 +1,4 @@
-# Swagger\Client\SubmissionApi
+# DPAE\SubmissionApi
 
 All URIs are relative to *https://virtserver.swaggerhub.com/smartgammadev/DPAE/1.0.0*
 
@@ -18,17 +18,17 @@ Submitting DPAE
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 // Configure API key authorization: ApiKeyAuth
-$config = Swagger\Client\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
+$config = DPAE\Configuration::getDefaultConfiguration()->setApiKey('Authorization', 'YOUR_API_KEY');
 // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-// $config = Swagger\Client\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
+// $config = DPAE\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
-$apiInstance = new Swagger\Client\Api\SubmissionApi(
+$apiInstance = new DPAE\SDK\SubmissionApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
     $config
 );
-$body = new \Swagger\Client\Model\Upload(); // \Swagger\Client\Model\Upload | 
+$body = new \DPAE\Model\Upload(); // \DPAE\Model\Upload | 
 
 try {
     $apiInstance->sendDeclaration($body);
@@ -42,7 +42,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**\Swagger\Client\Model\Upload**](../Model/Upload.md)|  |
+ **body** | [**\DPAE\Model\Upload**](../Model/Upload.md)|  |
 
 ### Return type
 
