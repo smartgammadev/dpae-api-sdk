@@ -62,29 +62,32 @@ $config = DPAE\Configuration::getDefaultConfiguration()->setApiKey('Authorizatio
 // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 // $config = DPAE\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
-$apiInstance = new DPAE\SDK\SubmissionApi(
+$apiInstance = new DPAE\SDK\ConsultationApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
     $config
 );
-$body = new \DPAE\Model\Upload(); // \DPAE\Model\Upload | 
+$contractId = 56; // int | 
 
 try {
-    $apiInstance->sendDeclaration($body);
+    $result = $apiInstance->getConsultation($contractId);
+    print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling SubmissionApi->sendDeclaration: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling ConsultationApi->getConsultation: ', $e->getMessage(), PHP_EOL;
 }
 ?>
 ```
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://virtserver.swaggerhub.com/smartgammadev/DPAE/1.0.0*
+All URIs are relative to *https://virtserver.swaggerhub.com/smartgammadev/DPAE/1.0.0-oas3*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*SubmissionApi* | [**sendDeclaration**](docs/Api/SubmissionApi.md#senddeclaration) | **POST** /deposer-dsn/1.0/ | 
+*ConsultationApi* | [**getConsultation**](docs/Api/ConsultationApi.md#getconsultation) | **GET** /lister-retours-flux/1.0/{contractId} | 
+*DepotApi* | [**sendDeclaration**](docs/Api/DepotApi.md#senddeclaration) | **POST** /deposer-dsn/1.0/ | 
+*TelechargementApi* | [**getTelechargement**](docs/Api/TelechargementApi.md#gettelechargement) | **GET** /telecharger-retour/1.0/{contractId}/{id} | 
 
 ## Documentation For Models
 
@@ -101,6 +104,7 @@ Class | Method | HTTP request | Description
  - [EmployerContact](docs/Model/EmployerContact.md)
  - [EmployerContactPhone](docs/Model/EmployerContactPhone.md)
  - [EmployerIdentity](docs/Model/EmployerIdentity.md)
+ - [Response](docs/Model/Response.md)
  - [Upload](docs/Model/Upload.md)
 
 ## Documentation For Authorization
