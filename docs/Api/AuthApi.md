@@ -1,17 +1,17 @@
-# DPAE\SubmissionApi
+# DPAE\AuthApi
 
-All URIs are relative to *https://virtserver.swaggerhub.com/smartgammadev/DPAE/1.0.0*
+All URIs are relative to *https://virtserver.swaggerhub.com/smartgammadev/DPAE/1.0.0-oas3*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**sendDeclaration**](SubmissionApi.md#senddeclaration) | **POST** /deposer-dsn/1.0/ | 
+[**authenticate**](AuthApi.md#authenticate) | **POST** /authentifier_dpae | 
 
-# **sendDeclaration**
-> sendDeclaration($body)
+# **authenticate**
+> string authenticate($body)
 
 
 
-Submitting DPAE
+Authentication
 
 ### Example
 ```php
@@ -22,18 +22,19 @@ $config = DPAE\Configuration::getDefaultConfiguration()->setApiKey('Authorizatio
 // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 // $config = DPAE\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
-$apiInstance = new DPAE\SDK\SubmissionApi(
+$apiInstance = new DPAE\SDK\AuthApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
     $config
 );
-$body = new \DPAE\Model\Upload(); // \DPAE\Model\Upload | 
+$body = new \DPAE\Model\AuthRequest(); // \DPAE\Model\AuthRequest | 
 
 try {
-    $apiInstance->sendDeclaration($body);
+    $result = $apiInstance->authenticate($body);
+    print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling SubmissionApi->sendDeclaration: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling AuthApi->authenticate: ', $e->getMessage(), PHP_EOL;
 }
 ?>
 ```
@@ -42,11 +43,11 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**\DPAE\Model\Upload**](../Model/Upload.md)|  |
+ **body** | [**\DPAE\Model\AuthRequest**](../Model/AuthRequest.md)|  | [optional]
 
 ### Return type
 
-void (empty response body)
+**string**
 
 ### Authorization
 
@@ -55,7 +56,7 @@ void (empty response body)
 ### HTTP request headers
 
  - **Content-Type**: application/xml
- - **Accept**: Not defined
+ - **Accept**: application/octet-stream
 
 [[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
 

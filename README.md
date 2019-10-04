@@ -62,19 +62,19 @@ $config = DPAE\Configuration::getDefaultConfiguration()->setApiKey('Authorizatio
 // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 // $config = DPAE\Configuration::getDefaultConfiguration()->setApiKeyPrefix('Authorization', 'Bearer');
 
-$apiInstance = new DPAE\SDK\ConsultationApi(
+$apiInstance = new DPAE\SDK\AuthApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client(),
     $config
 );
-$contractId = 56; // int | 
+$body = new \DPAE\Model\AuthRequest(); // \DPAE\Model\AuthRequest | 
 
 try {
-    $result = $apiInstance->getConsultation($contractId);
+    $result = $apiInstance->authenticate($body);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling ConsultationApi->getConsultation: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling AuthApi->authenticate: ', $e->getMessage(), PHP_EOL;
 }
 ?>
 ```
@@ -85,12 +85,14 @@ All URIs are relative to *https://virtserver.swaggerhub.com/smartgammadev/DPAE/1
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*AuthApi* | [**authenticate**](docs/Api/AuthApi.md#authenticate) | **POST** /authentifier_dpae | 
 *ConsultationApi* | [**getConsultation**](docs/Api/ConsultationApi.md#getconsultation) | **GET** /lister-retours-flux/1.0/{contractId} | 
 *DepotApi* | [**sendDeclaration**](docs/Api/DepotApi.md#senddeclaration) | **POST** /deposer-dsn/1.0/ | 
 *TelechargementApi* | [**getTelechargement**](docs/Api/TelechargementApi.md#gettelechargement) | **GET** /telecharger-retour/1.0/{contractId}/{id} | 
 
 ## Documentation For Models
 
+ - [AuthRequest](docs/Model/AuthRequest.md)
  - [Contract](docs/Model/Contract.md)
  - [DuesGroup](docs/Model/DuesGroup.md)
  - [Employee](docs/Model/Employee.md)

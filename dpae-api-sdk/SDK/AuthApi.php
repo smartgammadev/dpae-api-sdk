@@ -1,6 +1,6 @@
 <?php
 /**
- * SubmissionApi
+ * AuthApi
  * PHP version 5.
  *
  * @category Class
@@ -37,9 +37,10 @@ use GuzzleHttp\RequestOptions;
 use DPAE\ApiException;
 use DPAE\Configuration;
 use DPAE\HeaderSelector;
+use DPAE\ObjectSerializer;
 
 /**
- * SubmissionApi Class Doc Comment.
+ * AuthApi Class Doc Comment.
  *
  * @category Class
  *
@@ -47,7 +48,7 @@ use DPAE\HeaderSelector;
  *
  * @see     https://github.com/swagger-api/swagger-codegen
  */
-class SubmissionApi
+class AuthApi
 {
     /**
      * @var ClientInterface
@@ -88,32 +89,36 @@ class SubmissionApi
     }
 
     /**
-     * Operation sendDeclaration.
+     * Operation authenticate.
      *
-     * @param \DPAE\Model\Upload $body body (required)
+     * @param \DPAE\Model\AuthRequest $body body (optional)
      *
      * @throws \DPAE\ApiException        on non-2xx response
      * @throws \InvalidArgumentException
+     *
+     * @return string
      */
-    public function sendDeclaration($body)
+    public function authenticate($body = null)
     {
-        $this->sendDeclarationWithHttpInfo($body);
+        list($response) = $this->authenticateWithHttpInfo($body);
+
+        return $response;
     }
 
     /**
-     * Operation sendDeclarationWithHttpInfo.
+     * Operation authenticateWithHttpInfo.
      *
-     * @param \DPAE\Model\Upload $body (required)
+     * @param \DPAE\Model\AuthRequest $body (optional)
      *
      * @throws \DPAE\ApiException        on non-2xx response
      * @throws \InvalidArgumentException
      *
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     * @return array of string, HTTP status code, HTTP response headers (array of strings)
      */
-    public function sendDeclarationWithHttpInfo($body)
+    public function authenticateWithHttpInfo($body = null)
     {
-        $returnType = '';
-        $request = $this->sendDeclarationRequest($body);
+        $returnType = 'string';
+        $request = $this->authenticateRequest($body);
 
         try {
             $options = $this->createHttpClientOption();
@@ -143,28 +148,50 @@ class SubmissionApi
                 );
             }
 
-            return [null, $statusCode, $response->getHeaders()];
+            $responseBody = $response->getBody();
+            if ('\SplFileObject' === $returnType) {
+                $content = $responseBody; //stream goes to serializer
+            } else {
+                $content = $responseBody->getContents();
+                if (!in_array($returnType, ['string', 'integer', 'bool'])) {
+                    $content = json_decode($content);
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders(),
+            ];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        'string',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
             }
             throw $e;
         }
     }
 
     /**
-     * Operation sendDeclarationAsync.
+     * Operation authenticateAsync.
      *
      *
      *
-     * @param \DPAE\Model\Upload $body (required)
+     * @param \DPAE\Model\AuthRequest $body (optional)
      *
      * @throws \InvalidArgumentException
      *
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function sendDeclarationAsync($body)
+    public function authenticateAsync($body = null)
     {
-        return $this->sendDeclarationAsyncWithHttpInfo($body)
+        return $this->authenticateAsyncWithHttpInfo($body)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -173,26 +200,40 @@ class SubmissionApi
     }
 
     /**
-     * Operation sendDeclarationAsyncWithHttpInfo.
+     * Operation authenticateAsyncWithHttpInfo.
      *
      *
      *
-     * @param \DPAE\Model\Upload $body (required)
+     * @param \DPAE\Model\AuthRequest $body (optional)
      *
      * @throws \InvalidArgumentException
      *
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function sendDeclarationAsyncWithHttpInfo($body)
+    public function authenticateAsyncWithHttpInfo($body = null)
     {
-        $returnType = '';
-        $request = $this->sendDeclarationRequest($body);
+        $returnType = 'string';
+        $request = $this->authenticateRequest($body);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                    $responseBody = $response->getBody();
+                    if ('\SplFileObject' === $returnType) {
+                        $content = $responseBody; //stream goes to serializer
+                    } else {
+                        $content = $responseBody->getContents();
+                        if ('string' !== $returnType) {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders(),
+                    ];
                 },
                 function ($exception) {
                     $response = $exception->getResponse();
@@ -212,24 +253,17 @@ class SubmissionApi
     }
 
     /**
-     * Create request for operation 'sendDeclaration'.
+     * Create request for operation 'authenticate'.
      *
-     * @param \DPAE\Model\Upload $body (required)
+     * @param \DPAE\Model\AuthRequest $body (optional)
      *
      * @throws \InvalidArgumentException
      *
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function sendDeclarationRequest($body)
+    protected function authenticateRequest($body = null)
     {
-        // verify the required parameter 'body' is set
-        if (null === $body || (is_array($body) && 0 === count($body))) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $body when calling sendDeclaration'
-            );
-        }
-
-        $resourcePath = '/deposer-dsn/1.0/';
+        $resourcePath = '/authentifier_dpae';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
@@ -244,11 +278,11 @@ class SubmissionApi
 
         if ($multipart) {
             $headers = $this->headerSelector->selectHeadersForMultipart(
-                []
+                ['application/octet-stream']
             );
         } else {
             $headers = $this->headerSelector->selectHeaders(
-                [],
+                ['application/octet-stream'],
                 ['application/xml']
             );
         }
